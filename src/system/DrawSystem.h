@@ -1,0 +1,10 @@
+#ifndef BALLCOLLISION_DRAWSYSTEM_H
+#define BALLCOLLISION_DRAWSYSTEM_H
+
+
+class DrawSystem {
+
+};
+
+
+#endif //BALLCOLLISION_DRAWSYSTEM_H
