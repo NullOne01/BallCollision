@@ -32,14 +32,6 @@ namespace Math {
         static float dotProduct(const sf::Vector2f &vec1, const sf::Vector2f &vec2) {
             return vec1.x * vec2.x + vec1.y * vec2.y;
         }
-
-        static sf::Vector2f multiply(const sf::Vector2f &vec, float value) {
-            return {vec.x * value, vec.y * value};
-        }
-
-        static sf::Vector2f sum(const sf::Vector2f &vec1, const sf::Vector2f &vec2) {
-            return {vec1.x + vec2.x, vec1.y + vec2.y};
-        }
     };
 }
 

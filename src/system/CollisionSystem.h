@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "SystemBase.h"
+#include "../utilities/Vector2dUtils.h"
 
 class CollisionSystem : public SystemBase {
 public:

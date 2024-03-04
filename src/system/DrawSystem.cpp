@@ -15,6 +15,7 @@ void DrawSystem::update(float deltaTime) {
 void DrawSystem::drawBall(const Ball &ball) {
     sf::CircleShape circleToDraw;
     circleToDraw.setRadius(ball.radius);
+    circleToDraw.setFillColor(ball.color);
     circleToDraw.setPosition(ball.position.x, ball.position.y);
     window_->draw(circleToDraw);
 }

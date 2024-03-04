@@ -1,6 +1,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <memory>
+#include <chrono>
+#include <thread>
 #include "Game.h"
 #include "../entity/World.h"
 #include "../utilities/MiddleAverageFilter.h"
@@ -10,6 +12,7 @@
 #include "../system/FpsDebugSystem.h"
 #include "../system/CollisionSystem.h"
 #include "../utilities/Vector2dUtils.h"
+#include "../system/DrawCollisionSystem.h"
 
 constexpr int WINDOW_X = 1024;
 constexpr int WINDOW_Y = 768;
@@ -42,6 +45,9 @@ void Game::start() {
         float current_time = clock.getElapsedTime().asSeconds();
         float deltaTime = current_time - lastime;
 
+//        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+
         /// <summary>
         /// TODO: PLACE COLLISION CODE HERE
         /// объекты создаются в случайном месте на плоскости со случайным вектором скорости, имеют радиус R
@@ -65,10 +71,11 @@ void Game::initSystems() {
     systems_.push_back(std::make_unique<FpsDebugSystem>(window_.get(), world_.get()));
     systems_.push_back(std::make_unique<MovementSystem>(world_.get()));
     systems_.push_back(std::make_unique<CollisionSystem>(window_.get(), world_.get()));
+    systems_.push_back(std::make_unique<DrawCollisionSystem>(window_.get(), world_.get()));
 }
 
 void Game::initWorld() {
-    world_ = std::make_unique<World>();
+    world_ = std::make_unique<World>(sf::FloatRect(0, 0, window_->getSize().x, window_->getSize().y));
 
     for (int i = 0; i < (rand() % (MAX_BALLS - MIN_BALLS) + MIN_BALLS); i++) {
         Ball newBall;

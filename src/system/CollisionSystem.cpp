@@ -1,9 +1,19 @@
 #include "CollisionSystem.h"
 #include "../utilities/Vector2dUtils.h"
 
-CollisionSystem::CollisionSystem(sf::RenderWindow *window, World *world) : SystemBase(world), window_(window) {}
+CollisionSystem::CollisionSystem(sf::RenderWindow *window, World *world) : SystemBase(world), window_(window) {
+}
 
 void CollisionSystem::update(float deltaTime) {
+    world_->quadtree.clear();
+    for (auto &ball: world_->balls) {
+        ball.color = sf::Color::White;
+    }
+
+    for (auto &ball: world_->balls) {
+        world_->quadtree.add(&ball);
+    }
+
     for (auto &ball: world_->balls) {
         collideBorders(ball);
         collideOthers(ball);
@@ -29,54 +39,22 @@ void CollisionSystem::collideBorders(Ball &ball) {
 }
 
 void CollisionSystem::collideOthers(Ball &ball) {
-    for (auto &otherBall: world_->balls) {
-        if (&ball == &otherBall) {
+    sf::FloatRect box = {ball.position.x - ball.radius, ball.position.y - ball.radius, ball.radius * 2,
+                         ball.radius * 2};
+    std::vector<Ball *> otherBalls = world_->quadtree.query(box);
+
+    for (auto &otherBall: otherBalls) {
+        if (otherBall == &ball) {
             continue;
         }
 
-        if (areIntersected(ball, otherBall)) {
-            collideBalls(ball, otherBall);
+        if (areIntersected(ball, *otherBall)) {
+            ball.color = sf::Color::Red;
+            otherBall->color = sf::Color::Red;
+            collideBalls(ball, *otherBall);
         }
     }
 }
-
-//void CollisionSystem::collideBalls(Ball &ball1, Ball &ball2) {
-//    // Used: https://www.imada.sdu.dk/u/rolf/Edu/DM815/E10/2dcollisions.pdf
-//    // TODO: 100% sure can be optimized.
-//
-//    float m1 = ball1.radius * ball1.radius;
-//    float m2 = ball2.radius * ball2.radius;
-//
-//    sf::Vector2f v1 = Math::Vector2dUtils::getUnit(ball1.direction) * ball1.speed;
-//    sf::Vector2f v2 = Math::Vector2dUtils::getUnit(ball2.direction) * ball2.speed;
-//
-//    sf::Vector2f un = Math::Vector2dUtils::getDistanceUnitVec(ball1.position, ball2.position);
-//    sf::Vector2f ut = {-un.y, un.x};
-//
-//    float v1n = Math::Vector2dUtils::dotProduct(un, v1);
-//    float v1t = Math::Vector2dUtils::dotProduct(ut, v1);
-//    float v2n = Math::Vector2dUtils::dotProduct(un, v2);
-//    float v2t = Math::Vector2dUtils::dotProduct(ut, v2);
-//
-//    float v1t_after = v1t;
-//    float v2t_after = v2t;
-//
-//    float v1n_after = (v1n * (m1 - m2) + 2 * m2 * v2n) / (m1 + m2);
-//    float v2n_after = (v2n * (m2 - m1) + 2 * m1 * v1n) / (m1 + m2);
-//
-//    sf::Vector2f v1n_vec_after = Math::Vector2dUtils::multiply(un, v1n_after);
-//    sf::Vector2f v1t_vec_after = Math::Vector2dUtils::multiply(ut, v1t_after);
-//    sf::Vector2f v2n_vec_after = Math::Vector2dUtils::multiply(un, v2n_after);
-//    sf::Vector2f v2t_vec_after = Math::Vector2dUtils::multiply(ut, v2t_after);
-//
-//    sf::Vector2f v1_vec_after = Math::Vector2dUtils::sum(v1n_vec_after, v1t_vec_after);
-//    sf::Vector2f v2_vec_after = Math::Vector2dUtils::sum(v2n_vec_after, v2t_vec_after);
-//
-//    ball1.direction = Math::Vector2dUtils::getUnit(v1_vec_after);
-//    ball1.speed = Math::Vector2dUtils::getMagnitude(v1_vec_after);
-//    ball2.direction = Math::Vector2dUtils::getUnit(v2_vec_after);
-//    ball2.speed = Math::Vector2dUtils::getMagnitude(v2_vec_after);
-//}
 
 void CollisionSystem::collideBalls(Ball &a, Ball &b) {
     float a_mass = a.radius * a.radius;
