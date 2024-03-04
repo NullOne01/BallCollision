@@ -1,5 +1,4 @@
 #include "CollisionSystem.h"
-#include "../utilities/Vector2dUtils.h"
 
 CollisionSystem::CollisionSystem(sf::RenderWindow *window, World *world) : SystemBase(world), window_(window) {
 }
@@ -8,9 +7,6 @@ void CollisionSystem::update(float deltaTime) {
     world_->quadtree.clear();
     for (auto &ball: world_->balls) {
         ball.color = sf::Color::White;
-    }
-
-    for (auto &ball: world_->balls) {
         world_->quadtree.add(&ball);
     }
 
@@ -21,7 +17,7 @@ void CollisionSystem::update(float deltaTime) {
 }
 
 void CollisionSystem::collideBorders(Ball &ball) {
-    if (ball.position.x > window_->getSize().x - ball.radius) {
+    if (ball.position.x > static_cast<float>(window_->getSize().x) - ball.radius) {
         ball.velocity.x = -abs(ball.velocity.x);
     }
 
@@ -29,7 +25,7 @@ void CollisionSystem::collideBorders(Ball &ball) {
         ball.velocity.x = abs(ball.velocity.x);
     }
 
-    if (ball.position.y > window_->getSize().y - ball.radius) {
+    if (ball.position.y > static_cast<float>(window_->getSize().y) - ball.radius) {
         ball.velocity.y = -abs(ball.velocity.y);
     }
 
@@ -39,8 +35,8 @@ void CollisionSystem::collideBorders(Ball &ball) {
 }
 
 void CollisionSystem::collideOthers(Ball &ball) {
-    sf::FloatRect box = {ball.position.x - ball.radius, ball.position.y - ball.radius, ball.radius * 2,
-                         ball.radius * 2};
+    GetBallBox getBallBox;
+    sf::FloatRect box = getBallBox(&ball);
     std::vector<Ball *> otherBalls = world_->quadtree.query(box);
 
     for (auto &otherBall: otherBalls) {

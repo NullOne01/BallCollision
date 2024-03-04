@@ -1,17 +1,12 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <memory>
-#include <chrono>
-#include <thread>
 #include "Game.h"
-#include "../entity/World.h"
 #include "../utilities/MiddleAverageFilter.h"
-#include "../system/SystemBase.h"
 #include "../system/DrawSystem.h"
 #include "../system/MovementSystem.h"
 #include "../system/FpsDebugSystem.h"
 #include "../system/CollisionSystem.h"
-#include "../utilities/Vector2dUtils.h"
 #include "../system/DrawCollisionSystem.h"
 
 constexpr int WINDOW_X = 1024;
@@ -19,22 +14,19 @@ constexpr int WINDOW_Y = 768;
 constexpr int MAX_BALLS = 300;
 constexpr int MIN_BALLS = 100;
 
-Game::Game() {}
+Game::Game() = default;
 
 void Game::start() {
     window_ = std::make_unique<sf::RenderWindow>(sf::VideoMode(WINDOW_X, WINDOW_Y), "ball collision demo");
-    srand(time(NULL));
+    srand(time(nullptr));
 
     initWorld();
     initSystems();
 
-    // window_.setFramerateLimit(60);
-
     sf::Clock clock;
-    float lastime = clock.restart().asSeconds();
+    float lastTime = clock.restart().asSeconds();
 
     while (window_->isOpen()) {
-
         sf::Event event;
         while (window_->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -43,26 +35,14 @@ void Game::start() {
         }
 
         float current_time = clock.getElapsedTime().asSeconds();
-        float deltaTime = current_time - lastime;
+        float deltaTime = current_time - lastTime;
 
-//        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-
-        /// <summary>
-        /// TODO: PLACE COLLISION CODE HERE
-        /// объекты создаются в случайном месте на плоскости со случайным вектором скорости, имеют радиус R
-        /// Объекты движутся кинетически. Пространство ограниченно границами окна
-        /// Напишите обработчик столкновений шаров между собой и краями окна. Как это сделать эффективно?
-        /// Массы пропорцианальны площадям кругов, описывающих объекты
-        /// Как можно было-бы улучшить текущую архитектуру кода?
-        /// Данный код является макетом, вы можете его модифицировать по своему усмотрению
-
+        window_->clear();
         for (const auto &system: systems_) {
             system->update(deltaTime);
         }
-
         window_->display();
-        lastime = current_time;
+        lastTime = current_time;
     }
 }
 
@@ -71,11 +51,13 @@ void Game::initSystems() {
     systems_.push_back(std::make_unique<FpsDebugSystem>(window_.get(), world_.get()));
     systems_.push_back(std::make_unique<MovementSystem>(world_.get()));
     systems_.push_back(std::make_unique<CollisionSystem>(window_.get(), world_.get()));
-    systems_.push_back(std::make_unique<DrawCollisionSystem>(window_.get(), world_.get()));
+    // Warning: DrawCollisionSystem is highly unoptimized. Should be used only for debug purposes.
+//    systems_.push_back(std::make_unique<DrawCollisionSystem>(window_.get(), world_.get()));
 }
 
 void Game::initWorld() {
-    world_ = std::make_unique<World>(sf::FloatRect(0, 0, window_->getSize().x, window_->getSize().y));
+    world_ = std::make_unique<World>(
+            sf::FloatRect(0, 0, static_cast<float>(window_->getSize().x), static_cast<float>(window_->getSize().y)));
 
     for (int i = 0; i < (rand() % (MAX_BALLS - MIN_BALLS) + MIN_BALLS); i++) {
         Ball newBall;

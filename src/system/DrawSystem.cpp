@@ -5,8 +5,6 @@ DrawSystem::DrawSystem(sf::RenderWindow *window, World *world) : SystemBase(worl
 }
 
 void DrawSystem::update(float deltaTime) {
-    window_->clear();
-
     for (const auto &ball: world_->balls) {
         drawBall(ball);
     }

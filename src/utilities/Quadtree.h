@@ -56,7 +56,7 @@ namespace quadtree {
 
     private:
         static constexpr auto Threshold = std::size_t(8);
-        static constexpr auto MaxDepth = std::size_t(8);
+        static constexpr auto MaxDepth = std::size_t(16);
 
         struct Node {
             std::array<std::unique_ptr<Node>, 4> children;
@@ -140,7 +140,6 @@ namespace quadtree {
 
         void add(Node *node, std::size_t depth, const sf::FloatRect &box, const T &value) {
             assert(node != nullptr);
-//            assert(box.contains(mGetBox(value)));
             node->box = box;
             if (isLeaf(node)) {
                 // Insert the value in this node if possible
@@ -182,7 +181,6 @@ namespace quadtree {
 
         bool remove(Node *node, const sf::FloatRect &box, const T &value) {
             assert(node != nullptr);
-//            assert(box.contains(mGetBox(value)));
             if (isLeaf(node)) {
                 // Remove the value from node
                 removeValue(node, value);
@@ -237,7 +235,6 @@ namespace quadtree {
 
         void query(Node *node, const sf::FloatRect &box, const sf::FloatRect &queryBox, std::vector<T> &values) const {
             assert(node != nullptr);
-//            assert(queryBox.intersects(box));
             for (const auto &value: node->values) {
                 if (queryBox.intersects(mGetBox(value)))
                     values.push_back(value);

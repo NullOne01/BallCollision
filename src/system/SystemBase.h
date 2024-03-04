@@ -6,12 +6,15 @@
 
 class SystemBase {
 public:
+
+    explicit SystemBase(World *world);
+
+    virtual ~SystemBase() = default;
+
     virtual void update(float deltaTime) = 0;
 
 protected:
     World *world_;
-
-    explicit SystemBase(World *world);
 };
 
 

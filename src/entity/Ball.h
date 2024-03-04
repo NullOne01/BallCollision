@@ -8,11 +8,9 @@
 
 struct Ball {
     sf::Vector2f position;
+    sf::Vector2f velocity;
     float radius = 0;
     sf::Color color = sf::Color::White;
-
-    // NOTICE_ME_SENPAI: Removed direction and speed to make velocity.
-    sf::Vector2f velocity;
 };
 
 struct GetBallBox {
