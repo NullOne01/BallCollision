@@ -52,7 +52,7 @@ void Game::initSystems() {
     systems_.push_back(std::make_unique<MovementSystem>(world_.get()));
     systems_.push_back(std::make_unique<CollisionSystem>(window_.get(), world_.get()));
     // Warning: DrawCollisionSystem is highly unoptimized. Should be used only for debug purposes.
-//    systems_.push_back(std::make_unique<DrawCollisionSystem>(window_.get(), world_.get()));
+    //systems_.push_back(std::make_unique<DrawCollisionSystem>(window_.get(), world_.get()));
 }
 
 void Game::initWorld() {

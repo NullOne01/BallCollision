@@ -76,6 +76,7 @@ void CollisionSystem::collideBalls(Ball &a, Ball &b) {
 }
 
 bool CollisionSystem::areIntersected(const Ball &ball1, const Ball &ball2) {
-    float distance = Math::Vector2dUtils::getDistance(ball1.position, ball2.position);
-    return distance < ball1.radius + ball2.radius;
+    float distanceSqr = Math::Vector2dUtils::getDistanceSqr(ball1.position, ball2.position);
+    float radiusSum = ball1.radius + ball2.radius;
+    return distanceSqr < radiusSum * radiusSum;
 }

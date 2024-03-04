@@ -17,12 +17,19 @@ namespace Math {
         }
 
         static float getMagnitude(const sf::Vector2f &vec) {
-            // TODO: maybe sqrt is not needed in most cases?
-            return (float) std::sqrt(std::pow(vec.x, 2) + std::pow(vec.y, 2));
+            return (float) std::sqrt(getMagnitudeSqr(vec));
+        }
+
+        static float getMagnitudeSqr(const sf::Vector2f &vec) {
+            return vec.x * vec.x + vec.y * vec.y;
         }
 
         static float getDistance(const sf::Vector2f &point1, const sf::Vector2f &point2) {
             return getMagnitude(getFromToVec(point1, point2));
+        }
+
+        static float getDistanceSqr(const sf::Vector2f &point1, const sf::Vector2f &point2) {
+            return getMagnitudeSqr(getFromToVec(point1, point2));
         }
 
         static sf::Vector2f getDistanceUnitVec(const sf::Vector2f &point1, const sf::Vector2f &point2) {
