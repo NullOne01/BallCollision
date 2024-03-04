@@ -5,7 +5,7 @@ project(BallCollision)
 set(CMAKE_CXX_STANDARD 14)
 # set(SOURCE_FILES main.cpp)
 
-add_executable(BallCollision src/main.cpp src/MiddleAverageFilter.h src/entity/Ball.cpp src/entity/Ball.h src/system/DrawSystem.cpp src/system/DrawSystem.h src/entity/World.cpp src/entity/World.h src/system/SystemBase.cpp src/system/SystemBase.h src/engine/Game.cpp src/engine/Game.h src/system/MovementSystem.cpp src/system/MovementSystem.h src/system/FpsDebugSystem.cpp src/system/FpsDebugSystem.h)
+add_executable(BallCollision src/main.cpp src/utilities/MiddleAverageFilter.h src/entity/Ball.cpp src/entity/Ball.h src/system/DrawSystem.cpp src/system/DrawSystem.h src/entity/World.cpp src/entity/World.h src/system/SystemBase.cpp src/system/SystemBase.h src/engine/Game.cpp src/engine/Game.h src/system/MovementSystem.cpp src/system/MovementSystem.h src/system/FpsDebugSystem.cpp src/system/FpsDebugSystem.h src/system/CollisionSystem.cpp src/system/CollisionSystem.h src/utilities/Vector2dUtils.h)
 #add_executable(Game ${SOURCE_FILES})
 
 

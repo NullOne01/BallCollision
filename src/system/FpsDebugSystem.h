@@ -3,7 +3,7 @@
 
 
 #include "SystemBase.h"
-#include "../MiddleAverageFilter.h"
+#include "../utilities/MiddleAverageFilter.h"
 
 class FpsDebugSystem : public SystemBase {
 public:

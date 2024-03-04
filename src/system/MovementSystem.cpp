@@ -9,8 +9,8 @@ void MovementSystem::update(float deltaTime) {
 }
 
 void MovementSystem::moveBall(Ball &ball, float deltaTime) {
-    float dx = ball.direction.x * ball.speed * deltaTime;
-    float dy = ball.direction.y * ball.speed * deltaTime;
+    float dx = ball.velocity.x * deltaTime;
+    float dy = ball.velocity.y * deltaTime;
     ball.position.x += dx;
     ball.position.y += dy;
 }

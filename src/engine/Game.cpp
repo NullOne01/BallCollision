@@ -3,11 +3,13 @@
 #include <memory>
 #include "Game.h"
 #include "../entity/World.h"
-#include "../MiddleAverageFilter.h"
+#include "../utilities/MiddleAverageFilter.h"
 #include "../system/SystemBase.h"
 #include "../system/DrawSystem.h"
 #include "../system/MovementSystem.h"
 #include "../system/FpsDebugSystem.h"
+#include "../system/CollisionSystem.h"
+#include "../utilities/Vector2dUtils.h"
 
 constexpr int WINDOW_X = 1024;
 constexpr int WINDOW_Y = 768;
@@ -62,6 +64,7 @@ void Game::initSystems() {
     systems_.push_back(std::make_unique<DrawSystem>(window_.get(), world_.get()));
     systems_.push_back(std::make_unique<FpsDebugSystem>(window_.get(), world_.get()));
     systems_.push_back(std::make_unique<MovementSystem>(world_.get()));
+    systems_.push_back(std::make_unique<CollisionSystem>(window_.get(), world_.get()));
 }
 
 void Game::initWorld() {
@@ -71,10 +74,12 @@ void Game::initWorld() {
         Ball newBall;
         newBall.position.x = rand() % WINDOW_X;
         newBall.position.y = rand() % WINDOW_Y;
-        newBall.direction.x = (-5 + (rand() % 10)) / 3.;
-        newBall.direction.y = (-5 + (rand() % 10)) / 3.;
+
+        sf::Vector2f velocityDirection = {static_cast<float>((-5 + (rand() % 10)) / 3.),
+                                          static_cast<float>((-5 + (rand() % 10)) / 3.)};
+        float velocityMagnitude = 30 + rand() % 30;
+        newBall.velocity = velocityDirection * velocityMagnitude;
         newBall.radius = 5 + rand() % 5;
-        newBall.speed = 30 + rand() % 30;
         world_->balls.push_back(newBall);
     }
 }
