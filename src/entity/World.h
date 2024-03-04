@@ -5,7 +5,7 @@
 #include <vector>
 #include "Ball.h"
 
-class World {
+struct World {
     std::vector<Ball> balls;
 };
 

@@ -4,10 +4,10 @@
 # Usage
 # -----
 #
-# When you try to locate the SFML libraries, you must specify which modules you want to use (system, window, graphics, network, audio, main).
+# When you try to locate the SFML libraries, you must specify which modules you want to use (system, window_, graphics, network, audio, main).
 # If none is given, the SFML_LIBRARIES variable will be empty and you'll end up linking to nothing.
 # example:
-#   find_package(SFML COMPONENTS graphics window system) // find the graphics, window and system modules
+#   find_package(SFML COMPONENTS graphics window_ system) // find the graphics, window_ and system modules
 #
 # You can enforce a specific version, either MAJOR.MINOR or only MAJOR.
 # If nothing is specified, the version won't be checked (i.e. any version will be accepted).
@@ -38,7 +38,7 @@
 # ------
 #
 # This script defines the following variables:
-# - For each specified module XXX (system, window, graphics, network, audio, main):
+# - For each specified module XXX (system, window_, graphics, network, audio, main):
 #   - SFML_XXX_LIBRARY_DEBUG:   the name of the debug library of the xxx module (set to SFML_XXX_LIBRARY_RELEASE is no debug version is found)
 #   - SFML_XXX_LIBRARY_RELEASE: the name of the release library of the xxx module (set to SFML_XXX_LIBRARY_DEBUG is no release version is found)
 #   - SFML_XXX_LIBRARY:         the name of the library to link to for the xxx module (includes both debug and optimized names if necessary)
@@ -50,7 +50,7 @@
 # - SFML_DEPENDENCIES: the list of libraries SFML depends on, in case of static linking
 #
 # example:
-#   find_package(SFML 2 COMPONENTS system window graphics audio REQUIRED)
+#   find_package(SFML 2 COMPONENTS system window_ graphics audio REQUIRED)
 #   include_directories(${SFML_INCLUDE_DIR})
 #   add_executable(myapp ...)
 #   target_link_libraries(myapp ${SFML_LIBRARIES})
@@ -278,7 +278,7 @@ if(SFML_STATIC_LIBRARIES)
         set(SFML_DEPENDENCIES ${SFML_NETWORK_DEPENDENCIES} ${SFML_DEPENDENCIES})
     endif()
 
-    # sfml-window
+    # sfml-window_
     list(FIND SFML_FIND_COMPONENTS "window" FIND_SFML_WINDOW_COMPONENT)
     if(NOT ${FIND_SFML_WINDOW_COMPONENT} EQUAL -1)
 
